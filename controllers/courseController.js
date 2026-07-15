@@ -3,12 +3,20 @@ const Course = require("../models/Course");
 // Add Course
 const addCourse = async (req, res) => {
   try {
+    console.log("Request Body:", req.body);
+
     const newCourse = new Course(req.body);
 
     const savedCourse = await newCourse.save();
 
-    res.status(201).json(savedCourse);
+    res.status(201).json({
+      message: "Course Added Successfully",
+      course: savedCourse,
+    });
   } catch (error) {
+    console.log("========== ADD COURSE ERROR ==========");
+    console.error(error);
+
     res.status(500).json({
       message: "Failed to add course",
       error: error.message,
@@ -23,6 +31,8 @@ const getCourses = async (req, res) => {
 
     res.status(200).json(courses);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: "Failed to fetch courses",
       error: error.message,
@@ -43,6 +53,8 @@ const getCourse = async (req, res) => {
 
     res.status(200).json(course);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: "Error fetching course",
       error: error.message,
@@ -61,6 +73,8 @@ const updateCourse = async (req, res) => {
 
     res.status(200).json(updatedCourse);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: "Failed to update course",
       error: error.message,
@@ -77,6 +91,8 @@ const deleteCourse = async (req, res) => {
       message: "Course deleted successfully",
     });
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: "Failed to delete course",
       error: error.message,
