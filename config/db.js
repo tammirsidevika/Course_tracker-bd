@@ -1,35 +1,19 @@
-const express = require("express");
-const cors = require("cors");
-const dns = require("dns");
+const mongoose = require("mongoose");
 
-const connectDB = require("./config/db");
-const authRoutes = require("./routes/authRoutes");
-const courseRoutes = require("./routes/courseRoutes");
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(
+      "mongodb+srv://tammirsidevika05_db_user:Devika12345@cluster0.7ywegpc.mongodb.net/courseTrackerDB?retryWrites=true&w=majority&appName=Cluster0"
+    );
 
-const app = express();
+    console.log("Database Connected Successfully");
+    console.log("Host:", conn.connection.host);
+    console.log("Database:", conn.connection.name);
+    console.log("Ready State:", mongoose.connection.readyState);
+  } catch (error) {
+    console.log("Database Connection Failed");
+    console.log(error);
+  }
+};
 
-// Optional (for MongoDB Atlas)
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Connect Database
-connectDB();
-
-// Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/courses", courseRoutes);
-
-// Test Route
-app.get("/", (req, res) => {
-    res.send("Course Tracker Backend Running...");
-});
-
-// Start Server
-const PORT = 3001;
-
-app.listen(PORT, () => {
-    console.log(`Server Running at http://localhost:${PORT}`);
-});
+module.exports = connectDB;
